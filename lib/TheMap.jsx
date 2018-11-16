@@ -16,6 +16,7 @@ class TheMap extends React.Component {
     super(props)
     this.leaflet = null
     this.leafletLayers = {}
+    this.leafletMarkers = {}
     this.mapElmRef = React.createRef()
     this.mapElmId = newId({ prefix: 'the-map' })
     this.state = {}
@@ -42,14 +43,13 @@ class TheMap extends React.Component {
   }
 
   applyLayers (layers) {
-    const { leaflet } = this
+    const { leaflet, leafletLayers } = this
     if (!leaflet) {
       return
     }
-    const { leafletLayers } = this
     {
-      const layersToAdd = layers.filter(([url]) => !leafletLayers[url])
-      for (const [url, options] of layersToAdd) {
+      const layerValuesToAdd = layers.filter(([url]) => !leafletLayers[url])
+      for (const [url, options] of layerValuesToAdd) {
         const layer = this.createLayer(url, options)
         leafletLayers[url] = layer
         leaflet.addLayer(layer)
@@ -57,11 +57,34 @@ class TheMap extends React.Component {
     }
     {
       const urlsToRemain = layers.map(([url]) => url)
-      const layersToRemove = Object.entries(leafletLayers)
+      const layerEntriesToRemove = Object.entries(leafletLayers)
         .filter(([url]) => !urlsToRemain.includes(url))
-      for (const [url, layer] of layersToRemove) {
+      for (const [url, layer] of layerEntriesToRemove) {
         layer.unbindHandlers()
         leaflet.removeLayer(layer)
+      }
+    }
+  }
+
+  applyMarkers (markers) {
+    const { leaflet, leafletMarkers } = this
+    if (!leaflet) {
+      return
+    }
+    {
+      const markerValuesToAdd = markers.filter(({ key }) => !leafletMarkers[key])
+      for (const { key, ...options } of markerValuesToAdd) {
+        const marker = this.createMarker(options)
+        leafletMarkers[key] = marker
+        marker.addTo(leaflet)
+      }
+    }
+    {
+      const keysTORemain = markers.map(({ key }) => key)
+      const markerEntriesToRemove = Object.entries(leafletMarkers)
+        .filter(([key]) => !keysTORemain.includes(key))
+      for (const [key, marker] of markerEntriesToRemove) {
+        marker.remove()
       }
     }
   }
@@ -80,13 +103,14 @@ class TheMap extends React.Component {
     const leaflet = this.leaflet = L.map(mapElm.id, {
       fadeAnimation: false,
     })
-    const { lat, layers, lng, onLeaflet, zoom } = this.props
+    const { lat, layers, lng, markers, onLeaflet, zoom } = this.props
     onLeaflet && onLeaflet(leaflet)
     for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
       leaflet.on(event, handler)
     }
     this.applySight({ lat, lng, zoom })
     this.applyLayers(layers)
+    this.applyMarkers(markers)
   }
 
   componentDidUpdate (prevProps) {
@@ -96,10 +120,15 @@ class TheMap extends React.Component {
       const { lat, lng, zoom } = this.props
       this.applySight({ lat, lng, zoom })
     }
-    const needsUpdateLayer = ['leaflet', 'layers'].some((k) => k in diff)
-    if (needsUpdateLayer) {
+    const needsUpdateLayers = ['leaflet', 'layers'].some((k) => k in diff)
+    if (needsUpdateLayers) {
       const { layers } = this.props
       this.applyLayers(layers)
+    }
+    const needsUpdateMarkers = ['leaflet', 'markers'].some((k) => k in diff)
+    if (needsUpdateMarkers) {
+      const { markers } = this.props
+      this.applyMarkers(markers)
     }
   }
 
@@ -119,6 +148,14 @@ class TheMap extends React.Component {
     const layer = new TileLayer(url, options)
     layer.bindHandlers()
     return layer
+  }
+
+  createMarker ({ html, lat, lng }) {
+    return L.marker([lat, lng], {
+      icon: L.divIcon({
+        html,
+      }),
+    })
   }
 
   needsChange () {

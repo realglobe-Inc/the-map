@@ -94,6 +94,13 @@ class ExampleComponent extends React.Component {
     console.log('bounds', { west, south, east, north })
   }
 
+  moveToCurrent = () => {
+    navigator.geolocation.getCurrentPosition(({ coords }) => {
+      const { latitude: lat, longitude: lng } = coords
+      this.setState({ lat, lng })
+    }, () => alert('Failed to get current position'))
+  }
+
   handleClick = ({ lat, lng }) => {
     console.log('lat, lng', lat, lng)
   }
@@ -102,10 +109,18 @@ class ExampleComponent extends React.Component {
     lat: 51.505,
     lng: -0.09,
     zoom: 13,
+    markers: [
+      {
+        key: 'marker-01',
+        lat: 51.505,
+        lng: -0.09,
+        html: '<h3>This is marker 01</h3>',
+      }
+    ]
   }
 
   render () {
-    const { state: { lat, lng, zoom } } = this
+    const { state: { lat, lng, zoom, markers } } = this
     return (
       <div>
         <TheSpinStyle/>
@@ -117,8 +132,15 @@ class ExampleComponent extends React.Component {
                 height={'50vh'}
                 layers={MapLayers}
                 onClick={this.handleClick}
+                markers={markers}
         >
         </TheMap>
+
+        <hr/>
+
+        <button
+          onClick={this.moveToCurrent}>Move to current
+        </button>
       </div>
 
     )
