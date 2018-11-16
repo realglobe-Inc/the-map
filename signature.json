@@ -16,6 +16,18 @@
         "returns": null
       },
       {
+        "name": "applyMarkers",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "markers",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
         "name": "applySight",
         "docblock": null,
         "modifiers": [],
@@ -38,6 +50,18 @@
           },
           {
             "name": "options",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "createMarker",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "{ html, lat, lng }",
             "type": null
           }
         ],
