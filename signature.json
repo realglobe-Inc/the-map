@@ -1,0 +1,25 @@
+{
+  "TheMap": {
+    "description": "Geo map for the-components",
+    "displayName": "TheMap",
+    "methods": []
+  },
+  "TheMapStyle": {
+    "description": "Style for TheMap",
+    "displayName": "TheMapStyle",
+    "methods": [],
+    "props": {
+      "options": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "Style options",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      }
+    }
+  }
+}

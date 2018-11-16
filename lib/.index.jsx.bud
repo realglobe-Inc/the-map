@@ -1,0 +1,19 @@
+'use strict'
+
+const pkg = require('../package.json')
+const {dir} = require('the-templates')
+
+module.exports = [
+  'index.jsx',
+].map((filename) => ({
+  ...dir({
+    dirname: __dirname,
+    name: pkg.name,
+    description: pkg.description
+  }),
+  path: `${__dirname}/${filename}`
+}))
+
+if (!module.parent) {
+  require('coz').render(__filename)
+}
