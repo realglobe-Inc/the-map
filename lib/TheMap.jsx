@@ -4,7 +4,9 @@ import c from 'classnames'
 import L from 'leaflet'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { eventHandlersFor, htmlAttributesFor, newId } from 'the-component-util'
+import { changedProps, eventHandlersFor, htmlAttributesFor, newId } from 'the-component-util'
+import { TheSpin } from 'the-spin'
+import TileLayer from './classes/TileLayer'
 
 /**
  * Geo map for the-components
@@ -13,21 +15,125 @@ class TheMap extends React.Component {
   constructor (props) {
     super(props)
     this.leaflet = null
+    this.leafletLayers = {}
     this.mapElmRef = React.createRef()
     this.mapElmId = newId({ prefix: 'the-map' })
+    this.state = {}
+    this.mapEventHandlers = {
+      load: () => {
+      },
+      moveend: (e) => {
+        this.needsChange()
+      },
+      resize: () => {
+        this.needsChange()
+      },
+      unload: () => {
+      },
+      zoomend: (e) => {
+        this.needsChange()
+      },
+    }
+    this.mapLayerEventHandlers = {
+      load: () => {console.log('load')},
+      loading: () => {console.log('loading')},
+      tileerror: () => {console.log('tileerror')},
+      tileload: () => {console.log('tileload')},
+      tileloadstart: (e) => {
+        console.log('tileloadstart')
+        console.log('!!tile', e.tile)
+      },
+      tileunload: () => {console.log('tileunload')},
+    }
+  }
+
+  applyLayers (layers) {
+    const { leaflet } = this
+    if (!leaflet) {
+      return
+    }
+    const { leafletLayers } = this
+    {
+      const layersToAdd = layers.filter(([url]) => !leafletLayers[url])
+      for (const [url, options] of layersToAdd) {
+        const layer = this.createLayer(url, options)
+        leafletLayers[url] = layer
+        leaflet.addLayer(layer)
+      }
+    }
+    {
+      const urlsToRemain = layers.map(([url]) => url)
+      const layersToRemove = Object.entries(leafletLayers)
+        .filter(([url]) => !urlsToRemain.includes(url))
+      for (const [url, layer] of layersToRemove) {
+        layer.unbindHandlers()
+        leaflet.removeLayer(layer)
+      }
+    }
+  }
+
+  applySight ({ lat, lng, zoom } = {}) {
+    const { leaflet } = this
+    if (!leaflet) {
+      return
+    }
+    leaflet.setView([lat, lng], zoom)
+    this.needsChange()
   }
 
   componentDidMount () {
     const mapElm = this.mapElmRef.current
     const leaflet = this.leaflet = L.map(mapElm.id)
-    const { onLeaflet } = this.props
+    const { lat, layers, lng, onLeaflet, zoom } = this.props
     onLeaflet && onLeaflet(leaflet)
+    for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
+      leaflet.on(event, handler)
+    }
+    this.applySight({ lat, lng, zoom })
+    this.applyLayers(layers)
+  }
+
+  componentDidUpdate (prevProps) {
+    const diff = changedProps(prevProps, this.props)
+    const needsUpdate = ['leaflet', 'lat', 'lng', 'zoom'].some((k) => k in diff)
+    if (needsUpdate) {
+      const { lat, lng, zoom } = this.props
+      this.applySight({ lat, lng, zoom })
+    }
+    const needsUpdateLayer = ['leaflet', 'layers'].some((k) => k in diff)
+    if (needsUpdateLayer) {
+      const { layers } = this.props
+      this.applyLayers(layers)
+    }
   }
 
   componentWillUnmount () {
-    if (this.leaflet) {
-      this.leaflet.remove()
+    const { leaflet } = this
+    if (leaflet) {
+      for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
+        leaflet.off(event, handler)
+      }
+      leaflet.remove()
+      this.leaflet = null
     }
+    this.leafletLayers = {}
+  }
+
+  createLayer (url, options) {
+    const layer = new TileLayer(url, options)
+    layer.bindHandlers()
+    return layer
+  }
+
+  needsChange () {
+    const { leaflet } = this
+    if (!leaflet) {
+      return
+    }
+    const zoom = leaflet.getZoom()
+    const { lat, lng } = leaflet.getCenter()
+    const { onChange } = this.props
+    onChange && onChange({ lat, lng, zoom })
   }
 
   render () {
@@ -35,12 +141,17 @@ class TheMap extends React.Component {
     const {
       children,
       className,
+      spinning,
     } = props
     return (
       <div {...htmlAttributesFor(props, { except: ['className'] })}
            {...eventHandlersFor(props, { except: [] })}
            className={c('the-map', className)}
       >
+        <TheSpin className='the-map-spin'
+                 cover
+                 enabled={spinning}
+        />
         <div className='the-map-map'
              id={this.mapElmId}
              ref={this.mapElmRef}
@@ -54,7 +165,15 @@ class TheMap extends React.Component {
 
 TheMap.propTypes = {}
 
-TheMap.defaultProps = {}
+TheMap.defaultProps = {
+  layers: [
+    ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    }]
+  ],
+  spinning: false,
+}
 
 TheMap.displayName = 'TheMap'
 

@@ -50,12 +50,27 @@ TheMapStyle.data = (options) => {
     },
     '.the-map-map': {
       display: 'block',
-      height: '100%',
-      minHeight: 150,
-      minWidth: 150,
+      height: '150px',
       width: '100%',
     },
-
+    '.the-map-tile': {},
+    '.the-map-tile-loading': {
+      '.the-map-title-loading-msg': { display: 'flex' },
+    },
+    '.the-map-title-loading-msg': {
+      alignItem: 'center',
+      bottom: 0,
+      display: 'none',
+      justifyContent: 'center',
+      left: 0,
+      opacity: 0.2,
+      pointerEvents: 'none',
+      position: 'absolute',
+      right: 0,
+      textAlign: 'center',
+      top: 0,
+      zIndex: 1,
+    },
   })
 }
 
