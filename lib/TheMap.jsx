@@ -83,7 +83,9 @@ class TheMap extends React.Component {
 
   componentDidMount () {
     const mapElm = this.mapElmRef.current
-    const leaflet = this.leaflet = L.map(mapElm.id)
+    const leaflet = this.leaflet = L.map(mapElm.id, {
+      fadeAnimation: false,
+    })
     const { lat, layers, lng, onLeaflet, zoom } = this.props
     onLeaflet && onLeaflet(leaflet)
     for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
@@ -141,12 +143,16 @@ class TheMap extends React.Component {
     const {
       children,
       className,
+      height,
       spinning,
+      width,
     } = props
+    const style = { ...props.style, height, width }
     return (
-      <div {...htmlAttributesFor(props, { except: ['className'] })}
+      <div {...htmlAttributesFor(props, { except: ['className', 'width', 'height'] })}
            {...eventHandlersFor(props, { except: [] })}
            className={c('the-map', className)}
+           style={style}
       >
         <TheSpin className='the-map-spin'
                  cover
@@ -155,6 +161,7 @@ class TheMap extends React.Component {
         <div className='the-map-map'
              id={this.mapElmId}
              ref={this.mapElmRef}
+             style={style}
         >
           {children}
         </div>
@@ -166,6 +173,7 @@ class TheMap extends React.Component {
 TheMap.propTypes = {}
 
 TheMap.defaultProps = {
+  height: null,
   layers: [
     ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -173,6 +181,7 @@ TheMap.defaultProps = {
     }]
   ],
   spinning: false,
+  width: null,
 }
 
 TheMap.displayName = 'TheMap'

@@ -4,6 +4,7 @@
 'use strict'
 
 import L from 'leaflet'
+import { newId } from 'the-component-util'
 import { get } from 'the-window'
 
 class TileLayer extends L.TileLayer {
@@ -20,7 +21,7 @@ class TileLayer extends L.TileLayer {
     }
   }
 
-  createTile (coords, done) {
+  createTile (coords) {
     const document = get('document')
     const tile = document.createElement('div')
     tile.classList.add('the-map-tile')
@@ -31,14 +32,13 @@ class TileLayer extends L.TileLayer {
         if (err) {
           tile.classList.add('the-map-tile-failed')
         }
-        done(err, tile)
       })
       tile.appendChild(image)
     }
     {
-      const loadingMsg = document.createElement('span')
+      const loadingMsg = document.createElement('div')
       loadingMsg.classList.add('the-map-title-loading-msg')
-      loadingMsg.innerText = 'Loading...'
+      loadingMsg.innerHTML = `<i class="fas fa-spin fa-sync"/>`
       tile.appendChild(loadingMsg)
     }
     return tile

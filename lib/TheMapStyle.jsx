@@ -45,10 +45,15 @@ TheMapStyle.data = (options) => {
   } = options
   return asStyleData({
     '.the-map': {
+      background: '#F8F8F8',
       display: 'block',
+      overflow: 'hidden',
       position: 'relative',
     },
     '.the-map-map': {
+      '&.leaflet-container': {
+        background: 'transparent',
+      },
       display: 'block',
       height: '150px',
       width: '100%',
@@ -58,12 +63,15 @@ TheMapStyle.data = (options) => {
       '.the-map-title-loading-msg': { display: 'flex' },
     },
     '.the-map-title-loading-msg': {
-      alignItem: 'center',
+      alignItems: 'center',
       bottom: 0,
+      color: '#AAA',
       display: 'none',
+      fontSize: '36px',
+      fontStyle: 'italic',
       justifyContent: 'center',
       left: 0,
-      opacity: 0.2,
+      opacity: 0.1,
       pointerEvents: 'none',
       position: 'absolute',
       right: 0,

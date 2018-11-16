@@ -39,6 +39,8 @@ class ExampleComponent extends React.Component {
         <TheMap onLeaflet={this.handleLeaflet}
                 onChange={this.handleChange}
                 {...{ lat, lng, zoom }}
+                width={'100%'}
+                height={'50vh'}
                 layers={MapLayers}
         >
         </TheMap>
