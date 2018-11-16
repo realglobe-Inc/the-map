@@ -89,8 +89,13 @@ class ExampleComponent extends React.Component {
   handleLeaflet = (leaflet) => {
     this.leaflet = leaflet
   }
-  handleChange = ({ lat, lng, zoom }) => {
+  handleChange = ({ lat, lng, zoom, bounds: { west, south, east, north } }) => {
     this.setState({ lat, lng, zoom })
+    console.log('bounds', { west, south, east, north })
+  }
+
+  handleClick = ({ lat, lng }) => {
+    console.log('lat, lng', lat, lng)
   }
 
   state = {
@@ -111,6 +116,7 @@ class ExampleComponent extends React.Component {
                 width={'100%'}
                 height={'50vh'}
                 layers={MapLayers}
+                onClick={this.handleClick}
         >
         </TheMap>
       </div>
@@ -137,16 +143,19 @@ Components
 
 Geo map for the-components
 
-
-### TheMapStyle
-
-Style for TheMap
-
 **Props**
 
 | Name | Type | Description | Default |
 | --- | --- | ---- | ---- |
-| `options` | object  | Style options | `{}` |
+| `height` |   |  | `null` |
+| `layers` |   |  | `[
+  ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19,
+  }]
+]` |
+| `spinning` |   |  | `false` |
+| `width` |   |  | `null` |
 
 
 

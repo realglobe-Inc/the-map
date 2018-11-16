@@ -20,8 +20,13 @@ class ExampleComponent extends React.Component {
   handleLeaflet = (leaflet) => {
     this.leaflet = leaflet
   }
-  handleChange = ({ lat, lng, zoom }) => {
+  handleChange = ({ lat, lng, zoom, bounds: { west, south, east, north } }) => {
     this.setState({ lat, lng, zoom })
+    console.log('bounds', { west, south, east, north })
+  }
+
+  handleClick = ({ lat, lng }) => {
+    console.log('lat, lng', lat, lng)
   }
 
   state = {
@@ -42,6 +47,7 @@ class ExampleComponent extends React.Component {
                 width={'100%'}
                 height={'50vh'}
                 layers={MapLayers}
+                onClick={this.handleClick}
         >
         </TheMap>
       </div>

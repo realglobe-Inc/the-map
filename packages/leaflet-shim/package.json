@@ -1,0 +1,9 @@
+{
+  "name": "leaflet-shim",
+  "version": "1.0.0",
+  "main": "stub",
+  "browser": "browser",
+  "peerDependencies": {
+    "leaflet": "*"
+  }
+}

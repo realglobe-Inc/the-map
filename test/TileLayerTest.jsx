@@ -17,10 +17,6 @@ describe('tile-layer', () => {
   })
 
   it('Render a component', () => {
-    let element = render(
-       <TileLayer />
-    )
-    ok(element)
   })
 })
 

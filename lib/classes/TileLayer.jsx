@@ -3,9 +3,11 @@
  */
 'use strict'
 
-import L from 'leaflet'
+import L from 'leaflet-shim'
 import { newId } from 'the-component-util'
 import { get } from 'the-window'
+
+console.log('!!!L.TileLayer', L.TileLayer)
 
 class TileLayer extends L.TileLayer {
   constructor () {

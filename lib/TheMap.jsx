@@ -1,7 +1,7 @@
 'use strict'
 
 import c from 'classnames'
-import L from 'leaflet'
+import L from 'leaflet-shim'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { changedProps, eventHandlersFor, htmlAttributesFor, newId } from 'the-component-util'
@@ -20,6 +20,11 @@ class TheMap extends React.Component {
     this.mapElmId = newId({ prefix: 'the-map' })
     this.state = {}
     this.mapEventHandlers = {
+      click: (e) => {
+        const { onClick } = this.props
+        const { lat, lng } = e.latlng
+        onClick && onClick({ lat, lng })
+      },
       load: () => {
       },
       moveend: (e) => {
@@ -123,8 +128,19 @@ class TheMap extends React.Component {
     }
     const zoom = leaflet.getZoom()
     const { lat, lng } = leaflet.getCenter()
+    const bounds = leaflet.getBounds()
     const { onChange } = this.props
-    onChange && onChange({ lat, lng, zoom })
+    onChange && onChange({
+      bounds: {
+        east: bounds.getEast(),
+        north: bounds.getNorth(),
+        south: bounds.getSouth(),
+        west: bounds.getWest(),
+      },
+      lat,
+      lng,
+      zoom,
+    })
   }
 
   render () {

@@ -2,23 +2,83 @@
   "TheMap": {
     "description": "Geo map for the-components",
     "displayName": "TheMap",
-    "methods": []
-  },
-  "TheMapStyle": {
-    "description": "Style for TheMap",
-    "displayName": "TheMapStyle",
-    "methods": [],
+    "methods": [
+      {
+        "name": "applyLayers",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "layers",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "applySight",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "{ lat, lng, zoom }",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "createLayer",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "url",
+            "type": null
+          },
+          {
+            "name": "options",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "needsChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": {
-      "options": {
-        "type": {
-          "name": "object"
-        },
-        "required": false,
-        "description": "Style options",
+      "height": {
         "defaultValue": {
-          "value": "{}",
+          "value": "null",
           "computed": false
-        }
+        },
+        "required": false
+      },
+      "layers": {
+        "defaultValue": {
+          "value": "[\n  ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {\n    attribution: '&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n    maxZoom: 19,\n  }]\n]",
+          "computed": false
+        },
+        "required": false
+      },
+      "spinning": {
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        },
+        "required": false
+      },
+      "width": {
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        },
+        "required": false
       }
     }
   }
