@@ -34,17 +34,6 @@ class TheMap extends React.Component {
         this.needsChange()
       },
     }
-    this.mapLayerEventHandlers = {
-      load: () => {console.log('load')},
-      loading: () => {console.log('loading')},
-      tileerror: () => {console.log('tileerror')},
-      tileload: () => {console.log('tileload')},
-      tileloadstart: (e) => {
-        console.log('tileloadstart')
-        console.log('!!tile', e.tile)
-      },
-      tileunload: () => {console.log('tileunload')},
-    }
   }
 
   applyLayers (layers) {
