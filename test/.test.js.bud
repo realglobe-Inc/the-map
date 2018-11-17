@@ -8,7 +8,7 @@ const { test } = require('the-templates')
 
 module.exports = test({
   src: [
-    `${__dirname}/../lib/**/*.jsx`
+    `${__dirname}/../lib/*.jsx`
   ],
   dest: __dirname
 })

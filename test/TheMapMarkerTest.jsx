@@ -18,9 +18,9 @@ describe('the-map-marker', () => {
 
   it('Render a component', () => {
     let element = render(
-       <TheMapMarker />
+      <TheMapMarker/>
     )
-    ok(element)
+    ok(!element)
   })
 })
 
