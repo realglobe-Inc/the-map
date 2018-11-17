@@ -22,6 +22,7 @@ class TheMap extends React.Component {
     this.mapMarkers = {}
     this.mapElmRef = React.createRef()
     this.mapLayerControl = null
+    this.mapZoomControl = null
     this.mapElmId = newId({ prefix: 'the-map' })
     this.state = {}
     this.mapEventHandlers = {
@@ -44,6 +45,42 @@ class TheMap extends React.Component {
         this.needsChange()
       },
     }
+  }
+
+  applyCall (prevProps, actions) {
+    const diff = changedProps(prevProps, this.props)
+    for (const [target, action] of Object.entries(actions)) {
+      const needsUpdate = target.split(',').some((k) => k in diff)
+      if (needsUpdate) {
+        action(this.props)
+      }
+    }
+  }
+
+  applyLayerControl (layerControlEnabled) {
+    const { map, mapLayers } = this
+    if (!map) {
+      return
+    }
+    if (!layerControlEnabled) {
+      if (this.mapLayerControl) {
+        this.mapLayerControl.remove()
+        this.mapLayerControl = null
+      }
+      return
+    }
+    const { layerControlPosition } = this.props
+    const mapLayerControl = this.mapLayerControl = L.control.layers(
+      Object.assign(
+        {},
+        ...Object.values(mapLayers).map((layer) => ({
+          [layer.title]: layer,
+        }))
+      ),
+      {},
+      { position: layerControlPosition }
+    )
+    mapLayerControl.addTo(map)
   }
 
   applyLayers (layers) {
@@ -72,18 +109,6 @@ class TheMap extends React.Component {
     if (this.mapLayerControl) {
       this.mapLayerControl.remove()
     }
-    const { layerControlPosition } = this.props
-    const mapLayerControl = this.mapLayerControl = L.control.layers(
-      Object.assign(
-        {},
-        ...Object.values(mapLayers).map((layer) => ({
-          [layer.title]: layer,
-        }))
-      ),
-      {},
-      { position: layerControlPosition }
-    )
-    mapLayerControl.addTo(map)
   }
 
   applyMarkers (markers) {
@@ -117,38 +142,63 @@ class TheMap extends React.Component {
     this.needsChange()
   }
 
+  applyZoomControl (zoomControlEnabled) {
+    const { map } = this
+    if (!map) {
+      return
+    }
+    if (!zoomControlEnabled) {
+      if (this.mapZoomControl) {
+        this.mapZoomControl.remove()
+        this.mapZoomControl = null
+      }
+      return
+    }
+    const { zoomControlPosition } = this.props
+    const mapZoomControl = this.mapZoomControl = L.control.zoom({
+      position: zoomControlPosition,
+    })
+    mapZoomControl.addTo(map)
+  }
+
   componentDidMount () {
     const mapElm = this.mapElmRef.current
     const map = this.map = L.map(mapElm.id, {
       fadeAnimation: false,
       zoomControl: false,
     })
-    const { lat, layers, lng, markers, onLeafletMap, zoom } = this.props
+    const {
+      lat,
+      layerControlEnabled,
+      layers,
+      lng,
+      markers,
+      onLeafletMap,
+      zoom,
+      zoomControlEnabled,
+    } = this.props
     onLeafletMap && onLeafletMap(map)
     for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
       map.on(event, handler)
     }
     this.applySight({ lat, lng, zoom })
     this.applyLayers(layers)
+    this.applyLayerControl(layerControlEnabled)
+    this.applyZoomControl(zoomControlEnabled)
     this.applyMarkers(markers)
   }
 
   componentDidUpdate (prevProps) {
     const diff = changedProps(prevProps, this.props)
-    const needsUpdate = ['map', 'lat', 'lng', 'zoom'].some((k) => k in diff)
-    if (needsUpdate) {
-      const { lat, lng, zoom } = this.props
-      this.applySight({ lat, lng, zoom })
-    }
-    const needsUpdateLayers = ['map', 'layers'].some((k) => k in diff)
-    if (needsUpdateLayers) {
-      const { layers } = this.props
-      this.applyLayers(layers)
-    }
-    const needsUpdateMarkers = ['map', 'markers'].some((k) => k in diff)
-    if (needsUpdateMarkers) {
-      const { markers } = this.props
-      this.applyMarkers(markers)
+    this.applyCall(prevProps, {
+      'map,lat,lng,zoom': ({ lat, lng, zoom }) => this.applySight({ lat, lng, zoom }),
+      'map,layerControlEnabled': ({ layerControlEnabled }) => this.applyLayerControl(layerControlEnabled),
+      'map,layers': ({ layers }) => this.applyLayers(layers),
+      'map,markers': ({ markers }) => this.applyMarkers(markers),
+      'map,zoomControlEnabled': ({ zoomControlEnabled }) => this.applyZoomControl(zoomControlEnabled),
+    })
+    const needsUpdateLayerControl = ['map', 'layerControlEnabled'].some((k) => k in diff)
+    if (needsUpdateLayerControl) {
     }
   }
 

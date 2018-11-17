@@ -62,7 +62,7 @@ class ExampleComponent extends React.Component {
             color: 'white',
             lineHeight: '48px',
           }}>
-            <div>Marker 01</div>
+            <div>Mrkr01</div>
           </div>
         ),
       }
