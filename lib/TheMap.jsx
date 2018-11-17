@@ -4,9 +4,12 @@ import c from 'classnames'
 import L from 'leaflet-shim'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { ThemeValues } from 'the-component-constants'
 import { changedProps, eventHandlersFor, htmlAttributesFor, newId } from 'the-component-util'
 import { TheSpin } from 'the-spin'
+import DivIcon from './classes/DivIcon'
 import TileLayer from './classes/TileLayer'
+import TheMapMarker from './TheMapMarker'
 
 /**
  * Geo map for the-components
@@ -74,9 +77,8 @@ class TheMap extends React.Component {
     {
       const markerValuesToAdd = markers.filter(({ key }) => !leafletMarkers[key])
       for (const { key, ...options } of markerValuesToAdd) {
-        const marker = this.createMarker(options)
+        const marker = this.createMarker(leaflet, options)
         leafletMarkers[key] = marker
-        marker.addTo(leaflet)
       }
     }
     {
@@ -100,9 +102,7 @@ class TheMap extends React.Component {
 
   componentDidMount () {
     const mapElm = this.mapElmRef.current
-    const leaflet = this.leaflet = L.map(mapElm.id, {
-      fadeAnimation: false,
-    })
+    const leaflet = this.leaflet = L.map(mapElm.id, { fadeAnimation: false })
     const { lat, layers, lng, markers, onLeaflet, zoom } = this.props
     onLeaflet && onLeaflet(leaflet)
     for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
@@ -150,12 +150,35 @@ class TheMap extends React.Component {
     return layer
   }
 
-  createMarker ({ html, lat, lng }) {
-    return L.marker([lat, lng], {
-      icon: L.divIcon({
-        html,
+  createMarker (leaflet, options = {}) {
+    const {
+      draggable = false,
+      height = ThemeValues.tappableHeight,
+      lat,
+      lng,
+      node,
+      onClick,
+      riseOnHover = true,
+      width = ThemeValues.tappableHeight,
+    } = options
+    const marker = L.marker([lat, lng], {
+      draggable,
+      icon: new DivIcon({
+        className: 'the-map-marker-div-icon',
+        iconSize: L.point(width, height),
       }),
+      riseOnHover,
     })
+    marker.addTo(leaflet)
+    marker.node = (
+      <TheMapMarker container={marker.getElement()}
+                    onClick={onClick}
+                    style={{ height, width }}
+      >
+        {node || null}
+      </TheMapMarker>
+    )
+    return marker
   }
 
   needsChange () {
@@ -181,7 +204,7 @@ class TheMap extends React.Component {
   }
 
   render () {
-    const { props } = this
+    const { leafletMarkers, props } = this
     const {
       children,
       className,
@@ -207,6 +230,13 @@ class TheMap extends React.Component {
         >
           {children}
         </div>
+        {
+          Object.entries(leafletMarkers).map(([k, marker]) => (
+            <React.Fragment key={k}>
+              {marker.node || null}
+            </React.Fragment>
+          ))
+        }
       </div>
     )
   }

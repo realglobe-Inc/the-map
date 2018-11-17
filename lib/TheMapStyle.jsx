@@ -58,6 +58,23 @@ TheMapStyle.data = (options) => {
       height: '150px',
       width: '100%',
     },
+    '.the-map-marker': {
+      '> *': {
+        flexShrink: 0,
+      },
+      alignItems: 'center',
+      boxSizing: 'border-box',
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    '.the-map-marker-div-icon.leaflet-div-icon': {
+      alignItems: 'center',
+      background: 'transparent',
+      border: 'none',
+      display: 'flex',
+      justifyContent: 'center',
+      overflow: 'visible',
+    },
     '.the-map-tile': {},
     '.the-map-tile-loading': {
       '.the-map-title-loading-msg': { display: 'flex' },

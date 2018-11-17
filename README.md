@@ -114,7 +114,20 @@ class ExampleComponent extends React.Component {
         key: 'marker-01',
         lat: 51.505,
         lng: -0.09,
-        html: '<h3>This is marker 01</h3>',
+        onClick: () => console.log('marker01 clicked'),
+        node: (
+          <div style={{
+            borderRadius: '50%',
+            textAlign: 'center',
+            background: '#E33',
+            width: 48,
+            height: 48,
+            color: 'white',
+            lineHeight: '48px',
+          }}>
+            <div>Marker 01</div>
+          </div>
+        ),
       }
     ]
   }

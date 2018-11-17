@@ -6,9 +6,11 @@
 'use strict'
 
 import TheMap from './TheMap'
+import TheMapMarker from './TheMapMarker'
 import TheMapStyle from './TheMapStyle'
 
 export {
  TheMap,
+ TheMapMarker,
  TheMapStyle,
 }

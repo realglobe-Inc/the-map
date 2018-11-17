@@ -3,7 +3,8 @@ try {
 } catch (e) {
   // Failed on server side
   module.exports = {
-    TileLayer: function TileLayer () {}
+    TileLayer: function TileLayer () {},
+    DivIcon: function DivIcon () {},
   }
 
 }
