@@ -12,8 +12,6 @@ import { get } from 'the-window'
 class TileLayer extends L.TileLayer {
   constructor () {
     super(...arguments)
-
-    this.spinning = false
     this.handlers = {}
   }
 

@@ -6,19 +6,25 @@ import { TheSpinStyle } from 'the-spin'
 
 // @see https://leaflet-extras.github.io/leaflet-providers/preview/
 const MapLayers = [
-  ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  {
+    key: 'layer01',
+    title: 'Layer 01',
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }],
-  ['https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-    maxZoom: 17,
-    attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-  }],
+  },
+  {
+    key: 'layer02',
+    title: 'Layer 02',
+    url: 'http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png',
+    maxZoom: 18,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  },
 ]
 
 class ExampleComponent extends React.Component {
-  handleLeaflet = (leaflet) => {
-    this.leaflet = leaflet
+  handleLeafletMap = (map) => {
+    this.map = map
   }
   handleChange = ({ lat, lng, zoom, bounds: { west, south, east, north } }) => {
     this.setState({ lat, lng, zoom })
@@ -69,7 +75,7 @@ class ExampleComponent extends React.Component {
       <div>
         <TheSpinStyle/>
         <TheMapStyle/>
-        <TheMap onLeaflet={this.handleLeaflet}
+        <TheMap onLeafletMap={this.handleLeafletMap}
                 onChange={this.handleChange}
                 {...{ lat, lng, zoom }}
                 width={'100%'}

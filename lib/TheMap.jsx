@@ -17,10 +17,11 @@ import TheMapMarker from './TheMapMarker'
 class TheMap extends React.Component {
   constructor (props) {
     super(props)
-    this.leaflet = null
-    this.leafletLayers = {}
-    this.leafletMarkers = {}
+    this.map = null
+    this.mapLayers = {}
+    this.mapMarkers = {}
     this.mapElmRef = React.createRef()
+    this.mapLayerControl = null
     this.mapElmId = newId({ prefix: 'the-map' })
     this.state = {}
     this.mapEventHandlers = {
@@ -46,44 +47,60 @@ class TheMap extends React.Component {
   }
 
   applyLayers (layers) {
-    const { leaflet, leafletLayers } = this
-    if (!leaflet) {
+    const { map, mapLayers } = this
+    if (!map) {
       return
     }
     {
-      const layerValuesToAdd = layers.filter(([url]) => !leafletLayers[url])
-      for (const [url, options] of layerValuesToAdd) {
+      const layerValuesToAdd = layers.filter(({ key }) => !mapLayers[key])
+      for (const { key, url, ...options } of layerValuesToAdd) {
         const layer = this.createLayer(url, options)
-        leafletLayers[url] = layer
-        leaflet.addLayer(layer)
+        mapLayers[key] = layer
+        map.addLayer(layer)
       }
     }
     {
-      const urlsToRemain = layers.map(([url]) => url)
-      const layerEntriesToRemove = Object.entries(leafletLayers)
-        .filter(([url]) => !urlsToRemain.includes(url))
-      for (const [url, layer] of layerEntriesToRemove) {
+      const keysToRemain = layers.map(({ key }) => key)
+      const layerEntriesToRemove = Object.entries(mapLayers)
+        .filter(([key]) => !keysToRemain.includes(key))
+      for (const [key, layer] of layerEntriesToRemove) {
         layer.unbindHandlers()
-        leaflet.removeLayer(layer)
+        map.removeLayer(layer)
+        delete mapLayers[key]
       }
     }
+    if (this.mapLayerControl) {
+      this.mapLayerControl.remove()
+    }
+    const { layerControlPosition } = this.props
+    const mapLayerControl = this.mapLayerControl = L.control.layers(
+      Object.assign(
+        {},
+        ...Object.values(mapLayers).map((layer) => ({
+          [layer.title]: layer,
+        }))
+      ),
+      {},
+      { position: layerControlPosition }
+    )
+    mapLayerControl.addTo(map)
   }
 
   applyMarkers (markers) {
-    const { leaflet, leafletMarkers } = this
-    if (!leaflet) {
+    const { map, mapMarkers } = this
+    if (!map) {
       return
     }
     {
-      const markerValuesToAdd = markers.filter(({ key }) => !leafletMarkers[key])
+      const markerValuesToAdd = markers.filter(({ key }) => !mapMarkers[key])
       for (const { key, ...options } of markerValuesToAdd) {
-        const marker = this.createMarker(leaflet, options)
-        leafletMarkers[key] = marker
+        const marker = this.createMarker(map, options)
+        mapMarkers[key] = marker
       }
     }
     {
       const keysTORemain = markers.map(({ key }) => key)
-      const markerEntriesToRemove = Object.entries(leafletMarkers)
+      const markerEntriesToRemove = Object.entries(mapMarkers)
         .filter(([key]) => !keysTORemain.includes(key))
       for (const [key, marker] of markerEntriesToRemove) {
         marker.remove()
@@ -92,21 +109,24 @@ class TheMap extends React.Component {
   }
 
   applySight ({ lat, lng, zoom } = {}) {
-    const { leaflet } = this
-    if (!leaflet) {
+    const { map } = this
+    if (!map) {
       return
     }
-    leaflet.setView([lat, lng], zoom)
+    map.setView([lat, lng], zoom)
     this.needsChange()
   }
 
   componentDidMount () {
     const mapElm = this.mapElmRef.current
-    const leaflet = this.leaflet = L.map(mapElm.id, { fadeAnimation: false })
-    const { lat, layers, lng, markers, onLeaflet, zoom } = this.props
-    onLeaflet && onLeaflet(leaflet)
+    const map = this.map = L.map(mapElm.id, {
+      fadeAnimation: false,
+      zoomControl: false,
+    })
+    const { lat, layers, lng, markers, onLeafletMap, zoom } = this.props
+    onLeafletMap && onLeafletMap(map)
     for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
-      leaflet.on(event, handler)
+      map.on(event, handler)
     }
     this.applySight({ lat, lng, zoom })
     this.applyLayers(layers)
@@ -115,17 +135,17 @@ class TheMap extends React.Component {
 
   componentDidUpdate (prevProps) {
     const diff = changedProps(prevProps, this.props)
-    const needsUpdate = ['leaflet', 'lat', 'lng', 'zoom'].some((k) => k in diff)
+    const needsUpdate = ['map', 'lat', 'lng', 'zoom'].some((k) => k in diff)
     if (needsUpdate) {
       const { lat, lng, zoom } = this.props
       this.applySight({ lat, lng, zoom })
     }
-    const needsUpdateLayers = ['leaflet', 'layers'].some((k) => k in diff)
+    const needsUpdateLayers = ['map', 'layers'].some((k) => k in diff)
     if (needsUpdateLayers) {
       const { layers } = this.props
       this.applyLayers(layers)
     }
-    const needsUpdateMarkers = ['leaflet', 'markers'].some((k) => k in diff)
+    const needsUpdateMarkers = ['map', 'markers'].some((k) => k in diff)
     if (needsUpdateMarkers) {
       const { markers } = this.props
       this.applyMarkers(markers)
@@ -133,24 +153,25 @@ class TheMap extends React.Component {
   }
 
   componentWillUnmount () {
-    const { leaflet } = this
-    if (leaflet) {
+    const { map } = this
+    if (map) {
       for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
-        leaflet.off(event, handler)
+        map.off(event, handler)
       }
-      leaflet.remove()
-      this.leaflet = null
+      map.remove()
+      this.map = null
     }
-    this.leafletLayers = {}
+    this.mapLayers = {}
   }
 
-  createLayer (url, options) {
+  createLayer (url, { title, ...options } = {}) {
     const layer = new TileLayer(url, options)
+    layer.title = title
     layer.bindHandlers()
     return layer
   }
 
-  createMarker (leaflet, options = {}) {
+  createMarker (map, options = {}) {
     const {
       draggable = false,
       height = ThemeValues.tappableHeight,
@@ -169,7 +190,7 @@ class TheMap extends React.Component {
       }),
       riseOnHover,
     })
-    marker.addTo(leaflet)
+    marker.addTo(map)
     marker.node = (
       <TheMapMarker container={marker.getElement()}
                     onClick={onClick}
@@ -182,13 +203,13 @@ class TheMap extends React.Component {
   }
 
   needsChange () {
-    const { leaflet } = this
-    if (!leaflet) {
+    const { map } = this
+    if (!map) {
       return
     }
-    const zoom = leaflet.getZoom()
-    const { lat, lng } = leaflet.getCenter()
-    const bounds = leaflet.getBounds()
+    const zoom = map.getZoom()
+    const { lat, lng } = map.getCenter()
+    const bounds = map.getBounds()
     const { onChange } = this.props
     onChange && onChange({
       bounds: {
@@ -204,7 +225,7 @@ class TheMap extends React.Component {
   }
 
   render () {
-    const { leafletMarkers, props } = this
+    const { mapMarkers, props } = this
     const {
       children,
       className,
@@ -231,7 +252,7 @@ class TheMap extends React.Component {
           {children}
         </div>
         {
-          Object.entries(leafletMarkers).map(([k, marker]) => (
+          Object.entries(mapMarkers).map(([k, marker]) => (
             <React.Fragment key={k}>
               {marker.node || null}
             </React.Fragment>
@@ -242,18 +263,38 @@ class TheMap extends React.Component {
   }
 }
 
-TheMap.propTypes = {}
+TheMap.propTypes = {
+  /** Height of map */
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  /** latitude value */
+  lat: PropTypes.number.isRequired,
+  /** longitude value */
+  lng: PropTypes.number.isRequired,
+  /** Callback when map map created */
+  onLeafletMap: PropTypes.func,
+  /** Shows spinner */
+  spinning: PropTypes.bool,
+  /** Width of map */
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+}
 
 TheMap.defaultProps = {
   height: null,
+  layerControlEnabled: true,
+  layerControlPosition: 'topright',
   layers: [
-    ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      key: 'default',
       maxZoom: 19,
-    }]
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    }
   ],
+  onLeafletMap: null,
   spinning: false,
   width: null,
+  zoomControlEnabled: true,
+  zoomControlPosition: 'topleft',
 }
 
 TheMap.displayName = 'TheMap'
