@@ -279,6 +279,7 @@ class TheMap extends React.Component {
     const {
       children,
       className,
+      freezed,
       height,
       spinning,
       width,
@@ -294,7 +295,9 @@ class TheMap extends React.Component {
                  cover
                  enabled={spinning}
         />
-        <div className='the-map-map'
+        <div className={c('the-map-map', {
+          'the-map-map-freezed': freezed,
+        })}
              id={this.mapElmId}
              ref={this.mapElmRef}
              style={style}
@@ -314,6 +317,8 @@ class TheMap extends React.Component {
 }
 
 TheMap.propTypes = {
+  /** Disable all interactions */
+  freezed: PropTypes.bool,
   /** Height of map */
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** latitude value */
@@ -329,6 +334,7 @@ TheMap.propTypes = {
 }
 
 TheMap.defaultProps = {
+  freezed: false,
   height: null,
   layerControlEnabled: true,
   layerControlPosition: 'topright',

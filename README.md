@@ -188,15 +188,24 @@ Geo map for the-components
 
 | Name | Type | Description | Default |
 | --- | --- | ---- | ---- |
-| `height` |   |  | `null` |
+| `height` | union  | Height of map | `null` |
+| `lat` | number  | latitude value | `` |
+| `lng` | number  | longitude value | `` |
+| `onLeafletMap` | func  | Callback when map map created | `null` |
+| `spinning` | bool  | Shows spinner | `false` |
+| `width` | union  | Width of map | `null` |
+| `layerControlEnabled` |   |  | `true` |
+| `layerControlPosition` |   |  | `'topright'` |
 | `layers` |   |  | `[
-  ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    key: 'default',
     maxZoom: 19,
-  }]
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  }
 ]` |
-| `spinning` |   |  | `false` |
-| `width` |   |  | `null` |
+| `zoomControlEnabled` |   |  | `true` |
+| `zoomControlPosition` |   |  | `'topleft'` |
 
 ### TheMapMarker
 

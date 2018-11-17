@@ -58,6 +58,12 @@ TheMapStyle.data = (options) => {
       height: '150px',
       width: '100%',
     },
+    '.the-map-map-freezed': {
+      '.leaflet-control': {
+        display: 'none',
+      },
+      pointerEvents: 'none',
+    },
     '.the-map-marker': {
       '> *': {
         flexShrink: 0,
