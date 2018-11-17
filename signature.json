@@ -4,6 +4,34 @@
     "displayName": "TheMap",
     "methods": [
       {
+        "name": "applyCall",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "prevProps",
+            "type": null
+          },
+          {
+            "name": "actions",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "applyLayerControl",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "layerControlEnabled",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
         "name": "applyLayers",
         "docblock": null,
         "modifiers": [],
@@ -40,6 +68,18 @@
         "returns": null
       },
       {
+        "name": "applyZoomControl",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "zoomControlEnabled",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
         "name": "createLayer",
         "docblock": null,
         "modifiers": [],
@@ -49,7 +89,7 @@
             "type": null
           },
           {
-            "name": "options",
+            "name": "{ title, ...options }",
             "type": null
           }
         ],
@@ -61,7 +101,7 @@
         "modifiers": [],
         "params": [
           {
-            "name": "leaflet",
+            "name": "map",
             "type": null
           },
           {
@@ -81,29 +121,110 @@
     ],
     "props": {
       "height": {
+        "type": {
+          "name": "union",
+          "value": [
+            {
+              "name": "string"
+            },
+            {
+              "name": "number"
+            }
+          ]
+        },
+        "required": false,
+        "description": "Height of map",
         "defaultValue": {
           "value": "null",
+          "computed": false
+        }
+      },
+      "lat": {
+        "type": {
+          "name": "number"
+        },
+        "required": true,
+        "description": "latitude value"
+      },
+      "lng": {
+        "type": {
+          "name": "number"
+        },
+        "required": true,
+        "description": "longitude value"
+      },
+      "onLeafletMap": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Callback when map map created",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      },
+      "spinning": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Shows spinner",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
+      "width": {
+        "type": {
+          "name": "union",
+          "value": [
+            {
+              "name": "string"
+            },
+            {
+              "name": "number"
+            }
+          ]
+        },
+        "required": false,
+        "description": "Width of map",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      },
+      "layerControlEnabled": {
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        },
+        "required": false
+      },
+      "layerControlPosition": {
+        "defaultValue": {
+          "value": "'topright'",
           "computed": false
         },
         "required": false
       },
       "layers": {
         "defaultValue": {
-          "value": "[\n  ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {\n    attribution: '&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n    maxZoom: 19,\n  }]\n]",
+          "value": "[\n  {\n    attribution: '&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n    key: 'default',\n    maxZoom: 19,\n    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',\n  }\n]",
           "computed": false
         },
         "required": false
       },
-      "spinning": {
+      "zoomControlEnabled": {
         "defaultValue": {
-          "value": "false",
+          "value": "true",
           "computed": false
         },
         "required": false
       },
-      "width": {
+      "zoomControlPosition": {
         "defaultValue": {
-          "value": "null",
+          "value": "'topleft'",
           "computed": false
         },
         "required": false
