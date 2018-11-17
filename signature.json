@@ -61,7 +61,11 @@
         "modifiers": [],
         "params": [
           {
-            "name": "{ html, lat, lng }",
+            "name": "leaflet",
+            "type": null
+          },
+          {
+            "name": "options",
             "type": null
           }
         ],
@@ -105,5 +109,10 @@
         "required": false
       }
     }
+  },
+  "TheMapMarker": {
+    "description": "",
+    "displayName": "TheMapMarker",
+    "methods": []
   }
 }
