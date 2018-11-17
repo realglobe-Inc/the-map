@@ -120,6 +120,17 @@
       }
     ],
     "props": {
+      "freezed": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Disable all interactions",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
       "height": {
         "type": {
           "name": "union",
