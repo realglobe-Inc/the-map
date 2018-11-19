@@ -188,6 +188,7 @@ Geo map for the-components
 
 | Name | Type | Description | Default |
 | --- | --- | ---- | ---- |
+| `freezed` | bool  | Disable all interactions | `false` |
 | `height` | union  | Height of map | `null` |
 | `lat` | number  | latitude value | `` |
 | `lng` | number  | longitude value | `` |

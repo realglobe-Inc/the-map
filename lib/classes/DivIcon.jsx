@@ -4,9 +4,9 @@
  */
 'use strict'
 
-import L from 'leaflet-shim'
 import { newId } from 'the-component-util'
 import { get } from 'the-window'
+import L from '@okunishinishi/leaflet-shim'
 
 /** @lends DivIcon */
 class DivIcon extends L.DivIcon {

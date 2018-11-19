@@ -1,12 +1,12 @@
 'use strict'
 
 import c from 'classnames'
-import L from 'leaflet-shim'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { ThemeValues } from 'the-component-constants'
 import { changedProps, eventHandlersFor, htmlAttributesFor, newId } from 'the-component-util'
 import { TheSpin } from 'the-spin'
+import L from '@okunishinishi/leaflet-shim'
 import DivIcon from './classes/DivIcon'
 import TileLayer from './classes/TileLayer'
 import TheMapMarker from './TheMapMarker'

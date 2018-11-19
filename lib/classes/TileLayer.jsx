@@ -4,9 +4,9 @@
  */
 'use strict'
 
-import L from 'leaflet-shim'
 import { newId } from 'the-component-util'
 import { get } from 'the-window'
+import L from '@okunishinishi/leaflet-shim'
 
 /** @lends TileLayer */
 class TileLayer extends L.TileLayer {
