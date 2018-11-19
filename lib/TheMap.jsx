@@ -24,7 +24,9 @@ class TheMap extends React.Component {
     this.mapLayerControl = null
     this.mapZoomControl = null
     this.mapElmId = newId({ prefix: 'the-map' })
-    this.state = {}
+    this.state = {
+      mapMarkersNodes: {},
+    }
     this.mapEventHandlers = {
       click: (e) => {
         const { onClick } = this.props
@@ -119,16 +121,28 @@ class TheMap extends React.Component {
     {
       const markerValuesToAdd = markers.filter(({ key }) => !mapMarkers[key])
       for (const { key, ...options } of markerValuesToAdd) {
+        if (!key) {
+          console.warn('[TheMap] key is missing for marker:', options)
+        }
         const marker = this.createMarker(map, options)
         mapMarkers[key] = marker
+        this.setState({
+          mapMarkersNodes: {
+            ...this.state.mapMarkersNodes,
+            [key]: marker.node,
+          },
+        })
       }
     }
     {
-      const keysTORemain = markers.map(({ key }) => key)
+      const keysToRemain = markers.map(({ key }) => key)
       const markerEntriesToRemove = Object.entries(mapMarkers)
-        .filter(([key]) => !keysTORemain.includes(key))
+        .filter(([key]) => !keysToRemain.includes(key))
       for (const [key, marker] of markerEntriesToRemove) {
         marker.remove()
+        const mapMarkersNodes = { ...this.state.mapMarkersNodes }
+        delete mapMarkersNodes[key]
+        this.setState({ mapMarkersNodes })
       }
     }
   }
@@ -275,7 +289,7 @@ class TheMap extends React.Component {
   }
 
   render () {
-    const { mapMarkers, props } = this
+    const { props, state } = this
     const {
       children,
       className,
@@ -284,6 +298,7 @@ class TheMap extends React.Component {
       spinning,
       width,
     } = props
+    const { mapMarkersNodes } = state
     const style = { ...props.style, height, width }
     return (
       <div {...htmlAttributesFor(props, { except: ['className', 'width', 'height'] })}
@@ -305,9 +320,9 @@ class TheMap extends React.Component {
           {children}
         </div>
         {
-          Object.entries(mapMarkers).map(([k, marker]) => (
+          Object.entries(mapMarkersNodes).map(([k, node]) => (
             <React.Fragment key={k}>
-              {marker.node || null}
+              {node || null}
             </React.Fragment>
           ))
         }
