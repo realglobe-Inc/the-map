@@ -267,7 +267,7 @@ class TheMap extends React.Component {
   }
 
   needsChange () {
-    const { map } = this
+    const { map, props } = this
     if (!map) {
       return
     }
@@ -275,7 +275,7 @@ class TheMap extends React.Component {
     const { lat, lng } = map.getCenter()
     const bounds = map.getBounds()
     const { onChange } = this.props
-    onChange && onChange({
+    const result = {
       bounds: {
         east: bounds.getEast(),
         north: bounds.getNorth(),
@@ -285,7 +285,12 @@ class TheMap extends React.Component {
       lat,
       lng,
       zoom,
-    })
+    }
+    const skip = ['lat', 'lng', 'zoom'].every((k) => props[k] === result[k])
+    if (skip) {
+      return
+    }
+    onChange && onChange(result)
   }
 
   render () {
@@ -361,6 +366,7 @@ TheMap.defaultProps = {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     }
   ],
+  markers: [],
   onLeafletMap: null,
   spinning: false,
   width: null,

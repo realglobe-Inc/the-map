@@ -97,7 +97,7 @@ class ExampleComponent extends React.Component {
   }
   handleChange = ({ lat, lng, zoom, bounds: { west, south, east, north } }) => {
     this.setState({ lat, lng, zoom })
-    console.log('bounds', { west, south, east, north })
+    // console.log('bounds', { west, south, east, north })
   }
 
   moveToCurrent = () => {
@@ -108,7 +108,6 @@ class ExampleComponent extends React.Component {
   }
 
   handleClick = ({ lat, lng }) => {
-    console.log('lat, lng', lat, lng)
   }
 
   state = {
@@ -134,6 +133,15 @@ class ExampleComponent extends React.Component {
             <div>Mrkr01</div>
           </div>
         ),
+      }
+    ],
+    popups: [
+      {
+        key: 'popup-01',
+        for: 'marker-01',
+        node: (
+          <div>This is popup01 for marker01</div>
+        )
       }
     ]
   }
@@ -205,6 +213,7 @@ Geo map for the-components
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   }
 ]` |
+| `markers` |   |  | `[]` |
 | `zoomControlEnabled` |   |  | `true` |
 | `zoomControlPosition` |   |  | `'topleft'` |
 

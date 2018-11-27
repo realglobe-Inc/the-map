@@ -226,6 +226,13 @@
         },
         "required": false
       },
+      "markers": {
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        },
+        "required": false
+      },
       "zoomControlEnabled": {
         "defaultValue": {
           "value": "true",

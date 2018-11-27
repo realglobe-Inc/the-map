@@ -21,7 +21,7 @@
     "prop-types": "^15.6.2",
     "the-component-constants": "^2.0.4",
     "the-component-util": "^3.0.20",
-    "the-spin": "^3.1.11",
+    "the-spin": "^3.1.12",
     "the-style": "^2.2.3",
     "the-window": "^7.0.1"
   },
