@@ -70,7 +70,7 @@ Usage
 'use strict'
 
 import React from 'react'
-import { TheMap, TheMapStyle } from 'the-map'
+import { TheMap, TheMapStyle, TheMapPositionInput } from 'the-map'
 import { TheSpinStyle } from 'the-spin'
 
 // @see https://leaflet-extras.github.io/leaflet-providers/preview/
@@ -99,6 +99,12 @@ class ExampleComponent extends React.Component {
     this.setState({ lat, lng, zoom })
     // console.log('bounds', { west, south, east, north })
   }
+  handleUpdate = ({ pos01 }) => {
+    const { lat, lng, zoom } = pos01
+    this.setState({
+      post01: { lat, lng, zoom },
+    })
+  }
 
   moveToCurrent = () => {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -111,8 +117,8 @@ class ExampleComponent extends React.Component {
   }
 
   state = {
-    lat: 51.505,
-    lng: -0.09,
+    lat: 35.6895,
+    lng: 139.6917,
     zoom: 13,
     markers: [
       {
@@ -147,7 +153,7 @@ class ExampleComponent extends React.Component {
   }
 
   render () {
-    const { state: { lat, lng, zoom, markers } } = this
+    const { state: { lat, lng, zoom, markers, post01 } } = this
     return (
       <div>
         <TheSpinStyle/>
@@ -168,6 +174,23 @@ class ExampleComponent extends React.Component {
         <button
           onClick={this.moveToCurrent}>Move to current
         </button>
+
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <hr/>
+        <section>
+          <h1>As Input</h1>
+          <TheMapPositionInput value={post01}
+                               name={'pos01'}
+                               onUpdate={this.handleUpdate}
+          />
+        </section>
       </div>
 
     )

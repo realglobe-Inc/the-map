@@ -4,8 +4,6 @@
  */
 'use strict'
 
-import { newId } from 'the-component-util'
-import { get } from 'the-window'
 import L from '@okunishinishi/leaflet-shim'
 
 /** @lends DivIcon */

@@ -7,10 +7,12 @@
 
 import TheMap from './TheMap'
 import TheMapMarker from './TheMapMarker'
+import TheMapPositionInput from './TheMapPositionInput'
 import TheMapStyle from './TheMapStyle'
 
 export {
  TheMap,
  TheMapMarker,
+ TheMapPositionInput,
  TheMapStyle,
 }

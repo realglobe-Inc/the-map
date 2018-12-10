@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { asStyleData } from 'the-component-util'
 import { TheStyle } from 'the-style'
+import PositionInputStyleData from './styleData/PositionInputStyleData'
 
 /** Style for TheMap */
 const TheMapStyle = ({ className, id, options }) => (
@@ -43,66 +44,71 @@ TheMapStyle.data = (options) => {
   const {
     dominantColor = ThemeValues.dominantColor,
   } = options
-  return asStyleData({
-    '.the-map': {
-      background: '#F8F8F8',
-      display: 'block',
-      overflow: 'hidden',
-      position: 'relative',
-    },
-    '.the-map-map': {
-      '&.leaflet-container': {
+  return {
+    ...asStyleData({
+      '.the-map': {
+        background: '#F8F8F8',
+        display: 'block',
+        overflow: 'hidden',
+        position: 'relative',
+      },
+      '.the-map-map': {
+        '&.leaflet-container': {
+          background: 'transparent',
+        },
+        display: 'block',
+        height: '150px',
+        width: '100%',
+      },
+      '.the-map-map-freezed': {
+        '.leaflet-control': {
+          display: 'none',
+        },
+        pointerEvents: 'none',
+      },
+      '.the-map-marker': {
+        '> *': {
+          flexShrink: 0,
+        },
+        alignItems: 'center',
+        boxSizing: 'border-box',
+        display: 'flex',
+        justifyContent: 'center',
+      },
+      '.the-map-marker-div-icon.leaflet-div-icon': {
+        alignItems: 'center',
         background: 'transparent',
+        border: 'none',
+        display: 'flex',
+        justifyContent: 'center',
+        overflow: 'visible',
       },
-      display: 'block',
-      height: '150px',
-      width: '100%',
-    },
-    '.the-map-map-freezed': {
-      '.leaflet-control': {
+      '.the-map-tile': {},
+      '.the-map-tile-loading': {
+        '.the-map-title-loading-msg': { display: 'flex' },
+      },
+      '.the-map-title-loading-msg': {
+        alignItems: 'center',
+        bottom: 0,
+        color: '#AAA',
         display: 'none',
+        fontSize: '36px',
+        fontStyle: 'italic',
+        justifyContent: 'center',
+        left: 0,
+        opacity: 0.1,
+        pointerEvents: 'none',
+        position: 'absolute',
+        right: 0,
+        textAlign: 'center',
+        top: 0,
+        zIndex: 1,
       },
-      pointerEvents: 'none',
-    },
-    '.the-map-marker': {
-      '> *': {
-        flexShrink: 0,
-      },
-      alignItems: 'center',
-      boxSizing: 'border-box',
-      display: 'flex',
-      justifyContent: 'center',
-    },
-    '.the-map-marker-div-icon.leaflet-div-icon': {
-      alignItems: 'center',
-      background: 'transparent',
-      border: 'none',
-      display: 'flex',
-      justifyContent: 'center',
-      overflow: 'visible',
-    },
-    '.the-map-tile': {},
-    '.the-map-tile-loading': {
-      '.the-map-title-loading-msg': { display: 'flex' },
-    },
-    '.the-map-title-loading-msg': {
-      alignItems: 'center',
-      bottom: 0,
-      color: '#AAA',
-      display: 'none',
-      fontSize: '36px',
-      fontStyle: 'italic',
-      justifyContent: 'center',
-      left: 0,
-      opacity: 0.1,
-      pointerEvents: 'none',
-      position: 'absolute',
-      right: 0,
-      textAlign: 'center',
-      top: 0,
-      zIndex: 1,
-    },
-  })
+    }),
+    ...PositionInputStyleData({
+      dominantColor,
+    }),
+  }
 }
 
 export default TheMapStyle
