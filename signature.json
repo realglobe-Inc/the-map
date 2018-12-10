@@ -253,5 +253,71 @@
     "description": "",
     "displayName": "TheMapMarker",
     "methods": []
+  },
+  "TheMapPositionInput": {
+    "description": "",
+    "displayName": "TheMapPositionInput",
+    "methods": [
+      {
+        "name": "handleChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "{ bounds: { east, north, south, west }, lat, lng, zoom }",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": {
+      "id": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": ""
+      },
+      "name": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": ""
+      },
+      "value": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ lat: 35.6895, lng: 139.6917, zoom: 13 }",
+          "computed": false
+        }
+      },
+      "height": {
+        "defaultValue": {
+          "value": "150",
+          "computed": false
+        },
+        "required": false
+      },
+      "layers": {
+        "defaultValue": {
+          "value": "TheMap.defaultProps.layers || []",
+          "computed": false
+        },
+        "required": false
+      },
+      "width": {
+        "defaultValue": {
+          "value": "300",
+          "computed": false
+        },
+        "required": false
+      }
+    }
   }
 }
