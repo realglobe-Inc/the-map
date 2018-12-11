@@ -269,6 +269,18 @@
           }
         ],
         "returns": null
+      },
+      {
+        "name": "parseValue",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "type": null
+          }
+        ],
+        "returns": null
       }
     ],
     "props": {
@@ -288,7 +300,15 @@
       },
       "value": {
         "type": {
-          "name": "object"
+          "name": "union",
+          "value": [
+            {
+              "name": "string"
+            },
+            {
+              "name": "object"
+            }
+          ]
         },
         "required": false,
         "description": "",
