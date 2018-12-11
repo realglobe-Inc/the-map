@@ -24,10 +24,10 @@ class TheMapPositionInput extends React.Component {
   parseValue (value) {
     if (typeof value === 'string') {
       const [lat, lng, zoom] = value.split(',')
-      return { lat, lng, zoom }
+      return this.parseValue({ lat, lng, zoom })
     }
-    const { lat, lng, zoom } = value
-    return { lat, lng, zoom }
+    const { lat, lng, zoom = 13 } = value
+    return { lat: Number(lat), lng: Number(lng), zoom: Number(zoom) }
   }
 
   render () {
