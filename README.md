@@ -245,6 +245,21 @@ Geo map for the-components
 
 
 
+### TheMapPositionInput
+
+
+
+**Props**
+
+| Name | Type | Description | Default |
+| --- | --- | ---- | ---- |
+| `id` | string  |  | `` |
+| `name` | string  |  | `` |
+| `value` | object  |  | `{ lat: 35.6895, lng: 139.6917, zoom: 13 }` |
+| `height` |   |  | `150` |
+| `layers` |   |  | `TheMap.defaultProps.layers || []` |
+| `width` |   |  | `300` |
+
 
 
 <!-- Section from "doc/guides/03.Components.md.hbs" End -->

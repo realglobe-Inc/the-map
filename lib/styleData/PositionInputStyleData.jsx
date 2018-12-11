@@ -4,24 +4,25 @@ import { asStyleData, colorAlpha } from 'the-component-util'
 
 function PositionInputStyleData ({
                                    dominantColor,
-                                   targetSize = 64,
+                                   targetSize = 92,
                                  }) {
-  let zIndex = 999
+  const displayZIndex = 999
+  const barWidth = 2
   return asStyleData({
     '.the-map-position-input': {
       overflow: 'hidden',
       position: 'relative',
     },
     '.the-map-position-input-display': {
-      bottom: '16px',
       color: 'white',
       display: 'block',
-      fontSize: 'small',
+      fontSize: 'x-small',
       fontStyle: 'italic',
       position: 'absolute',
       textAlign: 'center',
+      top: `calc( 50% - ${targetSize / 2 + 16}px )`,
       width: '100%',
-      zIndex: zIndex + 2,
+      zIndex: displayZIndex + 2,
     },
     '.the-map-position-input-input': {
       display: 'none',
@@ -40,18 +41,36 @@ function PositionInputStyleData ({
       position: 'absolute',
       top: `calc( 50% - ${targetSize / 2}px )`,
       width: targetSize,
-      zIndex,
+      zIndex: displayZIndex,
     },
-    '.the-map-position-input-target-bar1': {},
-    '.the-map-position-input-target-bar2': {},
-    '.the-map-position-input-target-dot': {
+    '.the-map-position-input-target-bar1': {
       background: colorAlpha(dominantColor, 0.5),
+      bottom: 0,
+      display: 'block',
+      height: '100%',
+      left: `calc(50% - ${barWidth / 2}px)`,
+      position: 'absolute',
+      top: 0,
+      width: `${barWidth}px`,
+    },
+    '.the-map-position-input-target-bar2': {
+      background: colorAlpha(dominantColor, 0.5),
+      display: 'block',
+      height: `${barWidth}px`,
+      left: 0,
+      position: 'absolute',
+      right: 0,
+      top: `calc(50% - ${barWidth / 2}px)`,
+      width: '100%',
+    },
+    '.the-map-position-input-target-dot': {
+      background: colorAlpha(dominantColor, 1),
       border: `1px solid ${dominantColor}`,
       borderRadius: '50%',
       boxSizing: 'border-box',
       display: 'block',
-      height: '8px',
-      width: '8px',
+      height: '4px',
+      width: '4px',
     },
     '.the-map-position-input-values': {
       display: 'flex',
