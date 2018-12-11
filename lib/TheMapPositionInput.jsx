@@ -26,6 +26,9 @@ class TheMapPositionInput extends React.Component {
       value,
       width,
     } = this.props
+    if (!value) {
+      return null
+    }
     const { lat, lng, zoom } = value
     return (
       <div className='the-map-position-input'
