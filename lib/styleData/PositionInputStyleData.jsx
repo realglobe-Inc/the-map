@@ -32,7 +32,7 @@ function PositionInputStyleData ({
       background: 'transparent',
       border: `4px solid ${dominantColor}`,
       borderRadius: '50%',
-      boxShadow: `0 0 0 9999px ${colorAlpha(dominantColor, 0.8)}`,
+      boxShadow: `0 0 0 9999px rgba(255,255,255,0.9), 0 0 4px rgba(0,0,0,0.33) inset`,
       display: 'flex',
       height: targetSize,
       justifyContent: 'center',
@@ -44,7 +44,7 @@ function PositionInputStyleData ({
       zIndex: displayZIndex,
     },
     '.the-map-position-input-target-bar1': {
-      background: colorAlpha(dominantColor, 0.5),
+      background: colorAlpha(dominantColor, 0.66),
       bottom: 0,
       display: 'block',
       height: '100%',
@@ -54,7 +54,7 @@ function PositionInputStyleData ({
       width: `${barWidth}px`,
     },
     '.the-map-position-input-target-bar2': {
-      background: colorAlpha(dominantColor, 0.5),
+      background: colorAlpha(dominantColor, 0.66),
       display: 'block',
       height: `${barWidth}px`,
       left: 0,

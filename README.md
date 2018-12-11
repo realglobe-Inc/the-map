@@ -255,7 +255,7 @@ Geo map for the-components
 | --- | --- | ---- | ---- |
 | `id` | string  |  | `` |
 | `name` | string  |  | `` |
-| `value` | object  |  | `{ lat: 35.6895, lng: 139.6917, zoom: 13 }` |
+| `value` | union  |  | `{ lat: 35.6895, lng: 139.6917, zoom: 13 }` |
 | `height` |   |  | `150` |
 | `layers` |   |  | `TheMap.defaultProps.layers || []` |
 | `width` |   |  | `300` |
