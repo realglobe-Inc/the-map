@@ -43,6 +43,7 @@ TheMapStyle.data = (options) => {
   const { ThemeValues } = TheStyle
   const {
     dominantColor = ThemeValues.dominantColor,
+    inputBorderColor = ThemeValues.inputBorderColor,
   } = options
   return {
     ...asStyleData({
@@ -107,6 +108,7 @@ TheMapStyle.data = (options) => {
     }),
     ...PositionInputStyleData({
       dominantColor,
+      inputBorderColor,
     }),
   }
 }

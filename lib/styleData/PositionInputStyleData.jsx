@@ -4,12 +4,14 @@ import { asStyleData, colorAlpha } from 'the-component-util'
 
 function PositionInputStyleData ({
                                    dominantColor,
+                                   inputBorderColor,
                                    targetSize = 92,
                                  }) {
   const displayZIndex = 999
   const barWidth = 2
   return asStyleData({
     '.the-map-position-input': {
+      border: `1px solid ${inputBorderColor}`,
       overflow: 'hidden',
       position: 'relative',
     },
@@ -18,6 +20,7 @@ function PositionInputStyleData ({
       display: 'block',
       fontSize: 'x-small',
       fontStyle: 'italic',
+      pointerEvents: 'none',
       position: 'absolute',
       textAlign: 'center',
       top: `calc( 50% - ${targetSize / 2 + 16}px )`,
