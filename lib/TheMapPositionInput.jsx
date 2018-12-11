@@ -6,6 +6,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import TheMap from './TheMap'
 
+const hasVal = (v) => !!v || v === 0
+
 class TheMapPositionInput extends React.Component {
   constructor (props) {
     super(props)
@@ -39,19 +41,20 @@ class TheMapPositionInput extends React.Component {
       return null
     }
     const { lat, lng, zoom } = this.parseValue(value)
+    const hasLatLng = hasVal(lat) && hasVal(lng)
     return (
       <div className='the-map-position-input'
            style={{ height, width }}
       >
         <TheMap {...{
           height,
-          lat,
           layers,
-          lng,
           width,
           zoom,
         }}
+                lat={Number(lat)}
                 layerControlEnabled={false}
+                lng={Number(lng)}
                 onChange={this.handleChange}
         />
         <input className='the-map-position-input-input'
@@ -59,7 +62,7 @@ class TheMapPositionInput extends React.Component {
                value={`${lat},${lng}`}
         />
         <div className='the-map-position-input-display'>
-          {formatcoords(lat, lng).format('f')}
+          {hasLatLng && formatcoords(lat, lng).format('f')}
         </div>
         <div className='the-map-position-input-target'>
           <div className='the-map-position-input-target-dot'/>
@@ -77,7 +80,7 @@ TheMapPositionInput.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object,
-  ]).isRequired,
+  ]),
 }
 
 TheMapPositionInput.defaultProps = {

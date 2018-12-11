@@ -14,7 +14,7 @@ function PositionInputStyleData ({
       position: 'relative',
     },
     '.the-map-position-input-display': {
-      color: 'white',
+      color: '#AAA',
       display: 'block',
       fontSize: 'x-small',
       fontStyle: 'italic',
