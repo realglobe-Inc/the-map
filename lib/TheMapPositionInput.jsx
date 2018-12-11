@@ -19,6 +19,15 @@ class TheMapPositionInput extends React.Component {
     })
   }
 
+  parseValue (value) {
+    if (typeof value === 'string') {
+      const [lat, lng, zoom] = value.split(',')
+      return { lat, lng, zoom }
+    }
+    const { lat, lng, zoom } = value
+    return { lat, lng, zoom }
+  }
+
   render () {
     const {
       height,
@@ -29,7 +38,7 @@ class TheMapPositionInput extends React.Component {
     if (!value) {
       return null
     }
-    const { lat, lng, zoom } = value
+    const { lat, lng, zoom } = this.parseValue(value)
     return (
       <div className='the-map-position-input'
            style={{ height, width }}
@@ -65,7 +74,10 @@ class TheMapPositionInput extends React.Component {
 TheMapPositionInput.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.object.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
 }
 
 TheMapPositionInput.defaultProps = {
