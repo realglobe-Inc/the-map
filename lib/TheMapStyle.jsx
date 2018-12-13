@@ -52,6 +52,7 @@ TheMapStyle.data = (options) => {
         display: 'block',
         overflow: 'hidden',
         position: 'relative',
+        zIndex: 1,
       },
       '.the-map-map': {
         '&.leaflet-container': {
