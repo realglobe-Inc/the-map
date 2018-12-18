@@ -239,7 +239,7 @@ class TheMap extends React.Component {
     const {
       draggable = false,
       height = ThemeValues.tappableHeight,
-      interactive = true,
+      interactive = !this.props.freezed,
       lat,
       lng,
       node,
