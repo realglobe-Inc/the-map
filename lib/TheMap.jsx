@@ -239,6 +239,7 @@ class TheMap extends React.Component {
     const {
       draggable = false,
       height = ThemeValues.tappableHeight,
+      interactive = true,
       lat,
       lng,
       node,
@@ -252,6 +253,7 @@ class TheMap extends React.Component {
         className: 'the-map-marker-div-icon',
         iconSize: L.point(width, height),
       }),
+      interactive,
       riseOnHover,
     })
     marker.addTo(map)
