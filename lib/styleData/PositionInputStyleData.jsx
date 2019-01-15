@@ -18,6 +18,7 @@ function PositionInputStyleData ({
         },
       },
       border: `1px solid ${inputBorderColor}`,
+      maxWidth: '100%',
       overflow: 'hidden',
       position: 'relative',
     },
