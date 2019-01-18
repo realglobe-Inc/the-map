@@ -120,19 +120,16 @@ class TheMap extends React.Component {
     }
     {
       const markerValuesToAdd = markers.filter(({ key }) => !mapMarkers[key])
+      const mapMarkersNodes = { ...this.state.mapMarkersNodes }
       for (const { key, ...options } of markerValuesToAdd) {
         if (!key) {
           console.warn('[TheMap] key is missing for marker:', options)
         }
         const marker = this.createMarker(map, options)
         mapMarkers[key] = marker
-        this.setState({
-          mapMarkersNodes: {
-            ...this.state.mapMarkersNodes,
-            [key]: marker.node,
-          },
-        })
+        mapMarkersNodes[key] = marker.node
       }
+      this.setState({ mapMarkersNodes })
     }
     {
       const keysToRemain = markers.map(({ key }) => key)
@@ -145,6 +142,7 @@ class TheMap extends React.Component {
         this.setState({ mapMarkersNodes })
       }
     }
+    this.mapMarkers = mapMarkers
   }
 
   applySight ({ lat, lng, zoom } = {}) {
