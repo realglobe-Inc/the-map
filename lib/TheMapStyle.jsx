@@ -50,6 +50,7 @@ TheMapStyle.data = (options) => {
       '.the-map': {
         background: '#F8F8F8',
         display: 'block',
+        maxWidth: '100%',
         overflow: 'hidden',
         position: 'relative',
         zIndex: 1,
