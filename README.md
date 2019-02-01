@@ -161,7 +161,7 @@ class ExampleComponent extends React.Component {
         <TheMap onLeafletMap={this.handleLeafletMap}
                 onChange={this.handleChange}
                 {...{ lat, lng, zoom }}
-                width={'100%'}
+                width={'480px'}
                 height={'50vh'}
                 layers={MapLayers}
                 onClick={this.handleClick}

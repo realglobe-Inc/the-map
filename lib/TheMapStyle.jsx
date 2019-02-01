@@ -61,6 +61,7 @@ TheMapStyle.data = (options) => {
         },
         display: 'block',
         height: '150px',
+        maxWidth: '100%',
         width: '100%',
       },
       '.the-map-map-freezed': {
