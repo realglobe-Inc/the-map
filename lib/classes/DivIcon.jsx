@@ -8,11 +8,11 @@ import L from '@okunishinishi/leaflet-shim'
 
 /** @lends DivIcon */
 class DivIcon extends L.DivIcon {
-  constructor () {
+  constructor() {
     super(...arguments)
   }
 
-  createIcon (oldIcon) {
+  createIcon(oldIcon) {
     const div = super.createIcon(oldIcon)
 
     return div

@@ -2,14 +2,15 @@
 
 import { asStyleData, colorAlpha } from 'the-component-util'
 
-function PositionInputStyleData ({
-                                   dominantColor,
-                                   inputBorderColor,
-                                   targetSize = 92,
-                                 }) {
+function PositionInputStyleData({
+  dominantColor,
+  inputBorderColor,
+  targetSize = 92,
+}) {
   const displayZIndex = 999
   const barWidth = 2
-  const targetBoxShadow = ({ opacity = 0.9 }) => `0 0 0 9999px rgba(255,255,255,${opacity}), 0 0 4px rgba(0,0,0,0.33) inset`
+  const targetBoxShadow = ({ opacity = 0.9 }) =>
+    `0 0 0 9999px rgba(255,255,255,${opacity}), 0 0 4px rgba(0,0,0,0.33) inset`
   return asStyleData({
     '.the-map-position-input': {
       '&:hover': {

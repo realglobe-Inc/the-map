@@ -9,12 +9,12 @@ import TheMap from './TheMap'
 const hasVal = (v) => !!v || v === 0
 
 class TheMapPositionInput extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange ({ bounds: { east, north, south, west }, lat, lng, zoom }) {
+  handleChange({ bounds: { east, north, south, west }, lat, lng, zoom }) {
     const { name, onUpdate, value } = this.props
     const isStringBase = typeof value === 'string'
     onUpdate({
@@ -22,7 +22,7 @@ class TheMapPositionInput extends React.Component {
     })
   }
 
-  parseValue (value) {
+  parseValue(value) {
     if (typeof value === 'string') {
       const [lat, lng, zoom] = value.split(',')
       return this.parseValue({ lat, lng, zoom })
@@ -31,44 +31,39 @@ class TheMapPositionInput extends React.Component {
     return { lat: Number(lat), lng: Number(lng), zoom: Number(zoom) }
   }
 
-  render () {
-    const {
-      height,
-      layers,
-      value,
-      width,
-    } = this.props
+  render() {
+    const { height, layers, value, width } = this.props
     if (!value) {
       return null
     }
     const { lat, lng, zoom } = this.parseValue(value)
     const hasLatLng = hasVal(lat) && hasVal(lng)
     return (
-      <div className='the-map-position-input'
-           style={{ height, width }}
-      >
-        <TheMap {...{
-          height,
-          layers,
-          width,
-          zoom,
-        }}
-                lat={Number(lat)}
-                layerControlEnabled={false}
-                lng={Number(lng)}
-                onChange={this.handleChange}
+      <div className='the-map-position-input' style={{ height, width }}>
+        <TheMap
+          {...{
+            height,
+            layers,
+            width,
+            zoom,
+          }}
+          lat={Number(lat)}
+          layerControlEnabled={false}
+          lng={Number(lng)}
+          onChange={this.handleChange}
         />
-        <input className='the-map-position-input-input'
-               type='hidden'
-               value={`${lat},${lng}`}
+        <input
+          className='the-map-position-input-input'
+          type='hidden'
+          value={`${lat},${lng}`}
         />
         <div className='the-map-position-input-display'>
           {hasLatLng && formatcoords(lat, lng).format('f')}
         </div>
         <div className='the-map-position-input-target'>
-          <div className='the-map-position-input-target-dot'/>
-          <div className='the-map-position-input-target-bar1'/>
-          <div className='the-map-position-input-target-bar2'/>
+          <div className='the-map-position-input-target-dot' />
+          <div className='the-map-position-input-target-bar1' />
+          <div className='the-map-position-input-target-bar2' />
         </div>
       </div>
     )
@@ -78,10 +73,7 @@ class TheMapPositionInput extends React.Component {
 TheMapPositionInput.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-  ]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 }
 
 TheMapPositionInput.defaultProps = {
@@ -89,7 +81,6 @@ TheMapPositionInput.defaultProps = {
   layers: TheMap.defaultProps.layers || [],
   value: { lat: 35.6895, lng: 139.6917, zoom: 13 },
   width: 300,
-
 }
 
 export default TheMapPositionInput

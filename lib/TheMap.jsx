@@ -4,7 +4,12 @@ import c from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { ThemeValues } from 'the-component-constants'
-import { changedProps, eventHandlersFor, htmlAttributesFor, newId } from 'the-component-util'
+import {
+  changedProps,
+  eventHandlersFor,
+  htmlAttributesFor,
+  newId,
+} from 'the-component-util'
 import { TheSpin } from 'the-spin'
 import L from '@okunishinishi/leaflet-shim'
 import DivIcon from './classes/DivIcon'
@@ -33,16 +38,14 @@ class TheMap extends React.Component {
         const { lat, lng } = e.latlng
         onClick && onClick({ lat, lng })
       },
-      load: () => {
-      },
+      load: () => {},
       moveend: (e) => {
         this.needsChange()
       },
       resize: () => {
         this.needsChange()
       },
-      unload: () => {
-      },
+      unload: () => {},
       zoomend: (e) => {
         this.needsChange()
       },
@@ -72,16 +75,16 @@ class TheMap extends React.Component {
       return
     }
     const { layerControlPosition } = this.props
-    const mapLayerControl = this.mapLayerControl = L.control.layers(
+    const mapLayerControl = (this.mapLayerControl = L.control.layers(
       Object.assign(
         {},
         ...Object.values(mapLayers).map((layer) => ({
           [layer.title]: layer,
-        }))
+        })),
       ),
       {},
-      { position: layerControlPosition }
-    )
+      { position: layerControlPosition },
+    ))
     mapLayerControl.addTo(map)
   }
 
@@ -100,8 +103,9 @@ class TheMap extends React.Component {
     }
     {
       const keysToRemain = layers.map(({ key }) => key)
-      const layerEntriesToRemove = Object.entries(mapLayers)
-        .filter(([key]) => !keysToRemain.includes(key))
+      const layerEntriesToRemove = Object.entries(mapLayers).filter(
+        ([key]) => !keysToRemain.includes(key),
+      )
       for (const [key, layer] of layerEntriesToRemove) {
         layer.unbindHandlers()
         map.removeLayer(layer)
@@ -133,8 +137,9 @@ class TheMap extends React.Component {
     }
     {
       const keysToRemain = markers.map(({ key }) => key)
-      const markerEntriesToRemove = Object.entries(mapMarkers)
-        .filter(([key]) => !keysToRemain.includes(key))
+      const markerEntriesToRemove = Object.entries(mapMarkers).filter(
+        ([key]) => !keysToRemain.includes(key),
+      )
       for (const [key, marker] of markerEntriesToRemove) {
         marker.remove()
         delete mapMarkers[key]
@@ -168,18 +173,18 @@ class TheMap extends React.Component {
       return
     }
     const { zoomControlPosition } = this.props
-    const mapZoomControl = this.mapZoomControl = L.control.zoom({
+    const mapZoomControl = (this.mapZoomControl = L.control.zoom({
       position: zoomControlPosition,
-    })
+    }))
     mapZoomControl.addTo(map)
   }
 
   componentDidMount() {
     const mapElm = this.mapElmRef.current
-    const map = this.map = L.map(mapElm.id, {
+    const map = (this.map = L.map(mapElm.id, {
       fadeAnimation: false,
       zoomControl: false,
-    })
+    }))
     const {
       lat,
       layerControlEnabled,
@@ -204,13 +209,18 @@ class TheMap extends React.Component {
   componentDidUpdate(prevProps) {
     const diff = changedProps(prevProps, this.props)
     this.applyCall(prevProps, {
-      'map,lat,lng,zoom': ({ lat, lng, zoom }) => this.applySight({ lat, lng, zoom }),
-      'map,layerControlEnabled': ({ layerControlEnabled }) => this.applyLayerControl(layerControlEnabled),
+      'map,lat,lng,zoom': ({ lat, lng, zoom }) =>
+        this.applySight({ lat, lng, zoom }),
+      'map,layerControlEnabled': ({ layerControlEnabled }) =>
+        this.applyLayerControl(layerControlEnabled),
       'map,layers': ({ layers }) => this.applyLayers(layers),
       'map,markers': ({ markers }) => this.applyMarkers(markers),
-      'map,zoomControlEnabled': ({ zoomControlEnabled }) => this.applyZoomControl(zoomControlEnabled),
+      'map,zoomControlEnabled': ({ zoomControlEnabled }) =>
+        this.applyZoomControl(zoomControlEnabled),
     })
-    const needsUpdateLayerControl = ['map', 'layerControlEnabled'].some((k) => k in diff)
+    const needsUpdateLayerControl = ['map', 'layerControlEnabled'].some(
+      (k) => k in diff,
+    )
     if (needsUpdateLayerControl) {
     }
   }
@@ -257,9 +267,10 @@ class TheMap extends React.Component {
     })
     marker.addTo(map)
     marker.node = (
-      <TheMapMarker container={marker.getElement()}
-                    onClick={onClick}
-                    style={{ height, width }}
+      <TheMapMarker
+        container={marker.getElement()}
+        onClick={onClick}
+        style={{ height, width }}
       >
         {node || null}
       </TheMapMarker>
@@ -296,42 +307,32 @@ class TheMap extends React.Component {
 
   render() {
     const { props, state } = this
-    const {
-      children,
-      className,
-      freezed,
-      height,
-      spinning,
-      width,
-    } = props
+    const { children, className, freezed, height, spinning, width } = props
     const { mapMarkersNodes } = state
     const style = { ...props.style, height, width }
     return (
-      <div {...htmlAttributesFor(props, { except: ['className', 'width', 'height'] })}
-           {...eventHandlersFor(props, { except: [] })}
-           className={c('the-map', className)}
-           style={style}
-      >
-        <TheSpin className='the-map-spin'
-                 cover
-                 enabled={spinning}
-        />
-        <div className={c('the-map-map', {
-          'the-map-map-freezed': freezed,
+      <div
+        {...htmlAttributesFor(props, {
+          except: ['className', 'width', 'height'],
         })}
-             id={this.mapElmId}
-             ref={this.mapElmRef}
-             style={style}
+        {...eventHandlersFor(props, { except: [] })}
+        className={c('the-map', className)}
+        style={style}
+      >
+        <TheSpin className='the-map-spin' cover enabled={spinning} />
+        <div
+          className={c('the-map-map', {
+            'the-map-map-freezed': freezed,
+          })}
+          id={this.mapElmId}
+          ref={this.mapElmRef}
+          style={style}
         >
           {children}
         </div>
-        {
-          Object.entries(mapMarkersNodes).map(([k, node]) => (
-            <React.Fragment key={k}>
-              {node || null}
-            </React.Fragment>
-          ))
-        }
+        {Object.entries(mapMarkersNodes).map(([k, node]) => (
+          <React.Fragment key={k}>{node || null}</React.Fragment>
+        ))}
       </div>
     )
   }
@@ -361,11 +362,12 @@ TheMap.defaultProps = {
   layerControlPosition: 'topright',
   layers: [
     {
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       key: 'default',
       maxZoom: 19,
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    }
+    },
   ],
   markers: [],
   onLeafletMap: null,

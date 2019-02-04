@@ -221,7 +221,7 @@
       },
       "layers": {
         "defaultValue": {
-          "value": "[\n  {\n    attribution: '&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n    key: 'default',\n    maxZoom: 19,\n    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',\n  }\n]",
+          "value": "[\n  {\n    attribution:\n      '&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>',\n    key: 'default',\n    maxZoom: 19,\n    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',\n  },\n]",
           "computed": false
         },
         "required": false

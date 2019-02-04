@@ -10,18 +10,18 @@ import L from '@okunishinishi/leaflet-shim'
 
 /** @lends TileLayer */
 class TileLayer extends L.TileLayer {
-  constructor () {
+  constructor() {
     super(...arguments)
     this.handlers = {}
   }
 
-  bindHandlers () {
+  bindHandlers() {
     for (const [event, handler] of Object.entries(this.handlers)) {
       this.on(event, handler)
     }
   }
 
-  createTile (coords) {
+  createTile(coords) {
     const document = get('document')
     const tile = document.createElement('div')
     tile.classList.add('the-map-tile')
@@ -44,7 +44,7 @@ class TileLayer extends L.TileLayer {
     return tile
   }
 
-  unbindHandlers () {
+  unbindHandlers() {
     for (const [event, handler] of Object.entries(this.handlers)) {
       this.off(event, handler)
     }

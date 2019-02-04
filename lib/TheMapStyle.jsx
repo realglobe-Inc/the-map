@@ -8,22 +8,22 @@ import { TheStyle } from 'the-style'
 import PositionInputStyleData from './styleData/PositionInputStyleData'
 
 /** Style for TheMap */
-const TheMapStyle = ({ className, id, options }) => (
-  [
-    <TheStyle {...{ id }}
-              className={c('the-map-style', className)}
-              key='base'
-              styles={TheMapStyle.data(options)}
-    />,
-    ...TheMapStyle.externals.map((src) => (
-      <link className={c('the-map-style-external')}
-            href={src}
-            key={src}
-            rel='stylesheet'
-      />
-    ))
-  ]
-)
+const TheMapStyle = ({ className, id, options }) => [
+  <TheStyle
+    {...{ id }}
+    className={c('the-map-style', className)}
+    key='base'
+    styles={TheMapStyle.data(options)}
+  />,
+  ...TheMapStyle.externals.map((src) => (
+    <link
+      className={c('the-map-style-external')}
+      href={src}
+      key={src}
+      rel='stylesheet'
+    />
+  )),
+]
 
 TheMapStyle.displayName = 'TheMapStyle'
 TheMapStyle.propTypes = {
@@ -35,9 +35,7 @@ TheMapStyle.defaultProps = {
   options: {},
 }
 
-TheMapStyle.externals = [
-  'https://unpkg.com/leaflet@1.3.4/dist/leaflet.css',
-]
+TheMapStyle.externals = ['https://unpkg.com/leaflet@1.3.4/dist/leaflet.css']
 
 TheMapStyle.data = (options) => {
   const { ThemeValues } = TheStyle
