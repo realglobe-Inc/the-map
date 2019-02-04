@@ -15,7 +15,7 @@ import TheMapMarker from './TheMapMarker'
  * Geo map for the-components
  */
 class TheMap extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.map = null
     this.mapLayers = {}
@@ -49,7 +49,7 @@ class TheMap extends React.Component {
     }
   }
 
-  applyCall (prevProps, actions) {
+  applyCall(prevProps, actions) {
     const diff = changedProps(prevProps, this.props)
     for (const [target, action] of Object.entries(actions)) {
       const needsUpdate = target.split(',').some((k) => k in diff)
@@ -59,7 +59,7 @@ class TheMap extends React.Component {
     }
   }
 
-  applyLayerControl (layerControlEnabled) {
+  applyLayerControl(layerControlEnabled) {
     const { map, mapLayers } = this
     if (!map) {
       return
@@ -85,7 +85,7 @@ class TheMap extends React.Component {
     mapLayerControl.addTo(map)
   }
 
-  applyLayers (layers) {
+  applyLayers(layers) {
     const { map, mapLayers } = this
     if (!map) {
       return
@@ -113,7 +113,7 @@ class TheMap extends React.Component {
     }
   }
 
-  applyMarkers (markers) {
+  applyMarkers(markers) {
     const { map, mapMarkers } = this
     if (!map) {
       return
@@ -137,6 +137,7 @@ class TheMap extends React.Component {
         .filter(([key]) => !keysToRemain.includes(key))
       for (const [key, marker] of markerEntriesToRemove) {
         marker.remove()
+        delete mapMarkers[key]
         const mapMarkersNodes = { ...this.state.mapMarkersNodes }
         delete mapMarkersNodes[key]
         this.setState({ mapMarkersNodes })
@@ -145,7 +146,7 @@ class TheMap extends React.Component {
     this.mapMarkers = mapMarkers
   }
 
-  applySight ({ lat, lng, zoom } = {}) {
+  applySight({ lat, lng, zoom } = {}) {
     const { map } = this
     if (!map) {
       return
@@ -154,7 +155,7 @@ class TheMap extends React.Component {
     this.needsChange()
   }
 
-  applyZoomControl (zoomControlEnabled) {
+  applyZoomControl(zoomControlEnabled) {
     const { map } = this
     if (!map) {
       return
@@ -173,7 +174,7 @@ class TheMap extends React.Component {
     mapZoomControl.addTo(map)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const mapElm = this.mapElmRef.current
     const map = this.map = L.map(mapElm.id, {
       fadeAnimation: false,
@@ -200,7 +201,7 @@ class TheMap extends React.Component {
     this.applyMarkers(markers)
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const diff = changedProps(prevProps, this.props)
     this.applyCall(prevProps, {
       'map,lat,lng,zoom': ({ lat, lng, zoom }) => this.applySight({ lat, lng, zoom }),
@@ -214,7 +215,7 @@ class TheMap extends React.Component {
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     const { map } = this
     if (map) {
       for (const [event, handler] of Object.entries(this.mapEventHandlers)) {
@@ -226,14 +227,14 @@ class TheMap extends React.Component {
     this.mapLayers = {}
   }
 
-  createLayer (url, { title, ...options } = {}) {
+  createLayer(url, { title, ...options } = {}) {
     const layer = new TileLayer(url, options)
     layer.title = title
     layer.bindHandlers()
     return layer
   }
 
-  createMarker (map, options = {}) {
+  createMarker(map, options = {}) {
     const {
       draggable = false,
       height = ThemeValues.tappableHeight,
@@ -266,7 +267,7 @@ class TheMap extends React.Component {
     return marker
   }
 
-  needsChange () {
+  needsChange() {
     const { map, props } = this
     if (!map) {
       return
@@ -293,7 +294,7 @@ class TheMap extends React.Component {
     onChange && onChange(result)
   }
 
-  render () {
+  render() {
     const { props, state } = this
     const {
       children,
